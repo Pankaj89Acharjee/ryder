@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "CarBooking-ReactNative",
-    "slug": "CarBooking-ReactNative",
+    "name": "Ryder",
+    "slug": "ryder",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
