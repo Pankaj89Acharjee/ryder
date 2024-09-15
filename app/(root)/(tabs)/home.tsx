@@ -1,9 +1,13 @@
 import RideCard from '@/components/RideCard'
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
 import { Link } from 'expo-router'
-import { FlatList, Text } from 'react-native'
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ride } from "@/types/type"
+import { icons, images } from '@/constants'
+import GoogleTextInput from '@/components/GoogleTextInput'
+import Map from '@/components/Map'
+
 
 
 const recentRides = [
@@ -20,7 +24,7 @@ const recentRides = [
         "payment_status": "paid",
         "driver_id": 2,
         "user-email": 'pankaj2007acharjee@gmail.com',
-        "user_id": "1", 
+        "user_id": "1",
         "created_at": "2024-08-12 05:19:20.620007",
         "driver": {
             "driver_id": "2",
@@ -112,6 +116,15 @@ const recentRides = [
 
 export default function Page() {
     const { user } = useUser()
+    const loading = true
+
+    const handleSignOut = () => {
+
+    }
+
+    const handleDestinationPress = () => {
+
+    }
 
 
 
@@ -121,6 +134,68 @@ export default function Page() {
                 data={recentRides?.slice(0, 5)}
                 keyExtractor={(item) => item.ride_id}
                 renderItem={({ item }) => <RideCard ride={item} />}
+                className='px-5 rounded-lg'
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{
+                    paddingBottom: 150, //Gives extraspace in the bottom of the page while scrolling up
+                }}
+
+                // Render when the list is empty
+                ListEmptyComponent={() => (
+                    <View className='flex flex-col items-center justify-center'>
+                        {!loading ? (
+                            <>
+                                <Image
+                                    source={images.noResult} className='w-40 h-40'
+                                    alt='No rides found...'
+                                    resizeMode='contain'
+                                />
+                                <Text className='text-center text-sm'>No recent rides found</Text>
+                            </>
+                        ) : (
+                            <>
+                                <ActivityIndicator size="small" color="#000" />
+                            </>
+                        )}
+                    </View>
+                )}
+
+                ListHeaderComponent={() => (
+                    <>
+                        <View className='flex flex-row items-center justify-between my-5'>
+                            <Text className='text-lg font-JakartaBold capitalize'>Hi, {user?.firstName || user?.emailAddresses[0].emailAddress.split('@')[0]}</Text>
+
+                            <TouchableOpacity onPress={handleSignOut} className='justify-center items-center w-10 h-10 bg-green-200 rounded-full'>
+                                <Image source={icons.out}
+                                    className='w-4 h-4'
+                                />
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* For Google Auto Complete Search */}
+                        <GoogleTextInput
+                            icon={icons.search}
+                            containerStyle="bg-white shadow-md shadow-neutral-300"
+                            handlePress={handleDestinationPress}
+                        />
+
+                        <>
+                            <Text className='text-cl font-JakartaBold mb-3 mt-5'>Your current location:
+                            </Text>
+
+                            {/* MapSection */}
+                            <View className='flex flex-row item-center bg-transparent h-[300px]'>
+                                <Map></Map>
+                            </View>
+                        </>
+
+
+                        <Text className='text-cl font-JakartaBold mb-3 mt-5'>Recent rides:
+                        </Text>
+
+                    </>
+                )}
+
             />
         </SafeAreaView>
     )
