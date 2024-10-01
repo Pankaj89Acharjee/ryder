@@ -185,7 +185,7 @@ export default function Page() {
 
                             {/* MapSection */}
                             <View className='flex flex-row item-center bg-transparent h-[300px]'>
-                                <Map></Map>
+                                <Map />
                             </View>
                         </>
 
